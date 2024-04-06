@@ -1,17 +1,46 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import org.example.entities.Client;
+import org.example.entities.Planet;
+
+import org.example.entities.Ticket;
+import org.example.service.client.ClientService;
+import org.example.service.FlyWayService;
+import org.example.service.planet.PlanetService;
+import org.example.service.ticket.TicketService;
+
+import java.sql.Timestamp;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        FlyWayService flyway = FlyWayService.getInstance();
+        flyway.migrate("src/main/resources/hibernate.properties");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        ClientService clientService = new ClientService();
+        PlanetService planetService = new PlanetService();
+        TicketService ticketService = new TicketService();
+
+        Client client = new Client();
+        Planet planetFrom = new Planet();
+        Planet planetTo = new Planet();
+        Ticket ticket = new Ticket();
+
+        client.setName("TestClient");
+        clientService.create(client);
+
+        planetFrom.setName("FromPlanet");
+        planetFrom.setId("FPL");
+        planetTo.setName("ToPlanet");
+        planetTo.setId("TPL");
+
+        planetService.create(planetFrom);
+        planetService.create(planetTo);
+
+        ticket.setClient(client);
+        ticket.setCreated_at(new Timestamp(System.currentTimeMillis()));
+        ticket.setFromPlanet(planetFrom);
+        ticket.setToPlanet(planetTo);
+
+        ticketService.create(ticket);
     }
 }

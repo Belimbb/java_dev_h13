@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class ClientCrudServiceImpl implements ClientCrudService{
+public class ClientService implements ClientCrudService{
     private SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
     @Override
     public void create(Client client) {
@@ -44,6 +44,21 @@ public class ClientCrudServiceImpl implements ClientCrudService{
             String hql = "FROM client";
             Query<Client> query = session.createQuery(hql, Client.class);
             List<Client> results = query.getResultList();
+
+            LOGGER.info("All Clients received");
+            return results;
+        }
+    }
+
+    public List<Client> getAllWithCascades() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM client";
+            Query<Client> query = session.createQuery(hql, Client.class);
+            List<Client> results = query.getResultList();
+
+            for (Client client:results){
+                client.getTickets().size();
+            }
 
             LOGGER.info("All Clients received");
             return results;

@@ -2,7 +2,8 @@ package org.example.service.planet;
 
 import org.example.entities.Planet;
 import org.example.HibernateUtil;
-import org.example.service.client.ClientCrudServiceImpl;
+import org.example.entities.Ticket;
+import org.example.service.client.ClientService;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,9 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class PlanetCrudServiceImpl implements PlanetCrudService{
+public class PlanetService implements PlanetCrudService{
     private SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
     @Override
     public void create(Planet planet) {
@@ -47,6 +48,22 @@ public class PlanetCrudServiceImpl implements PlanetCrudService{
             List<Planet> results = query.getResultList();
 
             LOGGER.info("All Planets received");
+            return results;
+        }
+    }
+
+    public List<Planet> getAllWithCascades() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM ticket";
+            Query<Planet> query = session.createQuery(hql, Planet.class);
+            List<Planet> results = query.getResultList();
+
+            for (Planet planet:results){
+                planet.getTicketsTo();
+                planet.getTicketsFrom();
+            }
+
+            LOGGER.info("All Tickets received");
             return results;
         }
     }
