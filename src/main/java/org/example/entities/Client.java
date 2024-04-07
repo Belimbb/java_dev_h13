@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -14,10 +15,10 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column (nullable = false)
     @Size(min = 3, max = 200, message = "Name must be bigger than 3 and lower than 200 letters")
     private String name;
 
     @OneToMany (mappedBy = "client", cascade = CascadeType.ALL)
-    private Set<Ticket> tickets;
+    private Set<Ticket> tickets = new HashSet<>();
 }

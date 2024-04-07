@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class TicketService implements TicketCrudService{
-    private SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+    private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
     @Override

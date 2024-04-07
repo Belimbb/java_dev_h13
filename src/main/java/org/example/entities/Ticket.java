@@ -13,7 +13,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column (nullable = false)
     private Timestamp created_at;
 
     @ManyToOne
