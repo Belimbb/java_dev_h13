@@ -40,6 +40,16 @@ public class PlanetService implements PlanetCrudService{
         }
     }
 
+    public Planet getByIdWithCascades(String planetId) {
+        try (Session session = sessionFactory.openSession()) {
+            Planet planet = session.get(Planet.class, planetId);
+            planet.getTicketsFrom();
+            planet.getTicketsTo();
+            LOGGER.info("Client with id: "+planetId+", was found. Client: "+planet);
+            return planet;
+        }
+    }
+
     @Override
     public List<Planet> getAll() {
         try (Session session = sessionFactory.openSession()) {

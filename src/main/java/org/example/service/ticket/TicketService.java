@@ -38,6 +38,17 @@ public class TicketService implements TicketCrudService{
         }
     }
 
+    public Ticket getByIdWithCascades(long ticketId) {
+        try (Session session = sessionFactory.openSession()) {
+            Ticket ticket = session.get(Ticket.class, ticketId);
+            ticket.getFromPlanet();
+            ticket.getToPlanet();
+            ticket.getClient();
+            LOGGER.info("Ticket with id: "+ticketId+", was found. Ticket: "+ticket);
+            return ticket;
+        }
+    }
+
     @Override
     public List<Ticket> getAll() {
         try (Session session = sessionFactory.openSession()) {

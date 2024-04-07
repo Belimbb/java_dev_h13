@@ -38,6 +38,15 @@ public class ClientService implements ClientCrudService{
         }
     }
 
+    public Client getByIdWithCascades(long clientId) {
+        try (Session session = sessionFactory.openSession()) {
+            Client client = session.get(Client.class, clientId);
+            client.getTickets();
+            LOGGER.info("Client with id: "+clientId+", was found. Client: "+client);
+            return client;
+        }
+    }
+
     @Override
     public List<Client> getAll() {
         try (Session session = sessionFactory.openSession()) {
